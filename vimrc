@@ -21,6 +21,9 @@ Bundle "tomtom/tlib_vim"
 Plugin 'SirVer/ultisnips'
 Bundle "honza/vim-snippets"
 Bundle "Valloric/YouCompleteMe"
+Bundle "derekwyatt/vim-protodef"
+Bundle "derekwyatt/vim-fswitch"
+Bundle 'https://github.com/freeo/vim-kalisi'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -32,8 +35,9 @@ set shiftwidth=4
 set expandtab
 set number
 
-autocmd vimenter * NERDTree
-let g:nerdtree_tabs_open_on_console_startup = 1  
+map <c-n> :NERDTreeTabsToggle<CR>
+imap <c-n> <ESC>:NERDTreeTabsToggle<CR>
+nmap <c-n> :NERDTreeTabsToggle<CR>
 
 no <down> ddp
 no <left> <Nop>
@@ -52,10 +56,14 @@ vno <up> <Nop>
 " general mapping
 nmap <C-l> :tabnext<CR>
 nmap <C-h> :tabprevious<CR>
+nmap <C-t> :tabnew<CR>
 map <C-h> :tabprevious<CR>
 map <C-l> :tabnext<CR>
+map <C-t> :tabnew<CR>
 imap <C-h> <ESC>:tabprevious<CR>
 imap <C-l> <ESC>:tabnext<CR>
+imap <C-t> <ESC>:tabnew<CR>
+
 
 " delete surrounding characters
 noremap ds{ F{xf}x
@@ -69,6 +77,7 @@ noremap cs( F(xf)xi
 noremap ds) F(xf)x
 noremap cs) F(xf)xi
 
+" surround sellected charracters
 " upper or lowercase the current word
 nmap g^ gUiW
 nmap gv guiW
@@ -90,6 +99,8 @@ imap <leader>' ''<ESC>i
 imap <leader>" ""<ESC>i
 imap <leader>( ()<ESC>i
 imap <leader>[ []<ESC>i
+imap <leader>{ {}<ESC>i
+imap <leader><CR> <CR><leader>{<CR><ESC>O
 
 " Easy motion ==========================================
 map <Leader> <Plug>(easymotion-prefix)
@@ -110,10 +121,13 @@ set laststatus=2
 
 " Use 256 colours (Use this setting only if your terminal supports 256 colours)
 set t_Co=256
+let &t_AB="\e[48;5;%dm"
+let &t_AF="\e[38;5;%dm"
 
 " Color ================================================
 syntax enable
-colorscheme monokai
+colorscheme kalisi
+set background=dark
 
 " UltiSnip =============================================
 let g:UltiSnipsExpandTrigger="<c-j>"
@@ -125,3 +139,7 @@ let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_key_invoke_completion = '<c-j>'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_confirm_extra_conf = 0
+
+" Copy function declaration from a header file into the implementation file.
+nmap <F5> "lYml<nowiki>[[</nowiki>kw"cye'l
+nmap <F6> ma:let @n=@/<CR>"lp==:s/\<virtual\>/\/\*&\*\//e<CR>:s/\<static\>/\/\*&\*\//e<CR>:s/\s*=\s*0\s*//e<CR>:s/(.\{-}\zs=\s*[^,)]\{-1,}\>\ze\(\*\/\)\@!.*)/\/\*&\*\//e<CR>:s/(.\{-}\zs=\s*[^,)]\{-1,}\>\ze\(\*\/\)\@!.*)/\/\*&\*\//e<CR>:s/(.\{-}\zs=\s*[^,)]\{-1,}\>\ze\(\*\/\)\@!.*)/\/\*&\*\//e<CR>:let @/=@n<CR>'ajf(b"cPa::<Esc>f;s<CR>{<CR>}<CR><Esc>kk
