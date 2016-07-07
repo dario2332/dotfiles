@@ -24,16 +24,24 @@ Bundle "Valloric/YouCompleteMe"
 Bundle "derekwyatt/vim-protodef"
 Bundle "derekwyatt/vim-fswitch"
 Bundle 'https://github.com/freeo/vim-kalisi'
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
+Bundle "https://github.com/ternjs/tern_for_vim"
+Plugin 'mxw/vim-jsx'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
+set omnifunc=syntaxcomplete#Complete
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
-set tabstop=4
-set shiftwidth=4
+set tabstop=2
+set shiftwidth=2
 set expandtab
 set number
+
+let g:NERDTreeDirArrows = 1
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
 
 map <c-n> :NERDTreeTabsToggle<CR>
 imap <c-n> <ESC>:NERDTreeTabsToggle<CR>
@@ -76,7 +84,7 @@ noremap ds( F(xf)x
 noremap cs( F(xf)xi
 noremap ds) F(xf)x
 noremap cs) F(xf)xi
-
+      
 " surround sellected charracters
 " upper or lowercase the current word
 nmap g^ gUiW
@@ -86,7 +94,7 @@ nmap gv guiW
 nmap g<C-O> o<ESC>k
 " g<Ctrl+o> to create a new line above cursor (Ctrl to prevent collision with 'go' command)
 nmap gO O<ESC>j
-
+  
 "I really hate that things don't auto-center
 nmap G Gzz
 nmap n nzz
@@ -95,12 +103,25 @@ nmap } }zz
 nmap { {zz
 
 "quick pairs
-imap <leader>' ''<ESC>i
-imap <leader>" ""<ESC>i
+"imap <leader>' ''<ESC>i
+"imap <leader>" \""<ESC>i
 imap <leader>( ()<ESC>i
 imap <leader>[ []<ESC>i
 imap <leader>{ {}<ESC>i
 imap <leader><CR> <CR><leader>{<CR><ESC>O
+
+"latex croatian letters
+imap <leader>c \v{c}
+imap <leader>C \v{C}
+imap <leader>cc \'{c}
+imap <leader>CC \'{C}
+imap <leader>s \v{s}
+imap <leader>S \v{S}
+imap <leader>z \v{z}
+imap <leader>Z \v{Z}
+imap <leader>d \dj{}
+imap <leader>D \DJ{}
+command ConvertCroatianLetters :%s/\\v{c}/č/g | :%s/\\'{c}/ć/g | :%s/\\v{s}/š/g | :%s/\\v{z}/ž/g | :%s/\\dj{}/đ/g | :%s/\\v{C}/Č/g | :%s/\\v{S}/Š/g | :%s/\\v{Z}/Ž/g | :%s/\\DJ{}/Đ/g | :%s/\\'{C}/Ć/g
 
 " Easy motion ==========================================
 map <Leader> <Plug>(easymotion-prefix)
@@ -118,6 +139,9 @@ set rtp+=$HOME/.local/lib/python2.7/site-packages/powerline/bindings/vim/
 
 " Always show statusline
 set laststatus=2
+
+" TernJS
+"autocmd FileType javascript setlocal omnifunc=tern#Complete
 
 " Use 256 colours (Use this setting only if your terminal supports 256 colours)
 set t_Co=256
@@ -139,6 +163,19 @@ let g:ycm_min_num_of_chars_for_completion = 1
 let g:ycm_key_invoke_completion = '<c-j>'
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_confirm_extra_conf = 0
+
+" Latex =================================================
+let g:LatexBox_latexmk_options = "-pvc -pdfps"
+
+"python with virtualenv support
+py << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
 
 " Copy function declaration from a header file into the implementation file.
 nmap <F5> "lYml<nowiki>[[</nowiki>kw"cye'l
