@@ -168,7 +168,8 @@ let g:ycm_confirm_extra_conf = 0
 let g:LatexBox_latexmk_options = "-pvc -pdfps"
 
 "python with virtualenv support
-py << EOF
+
+python3 << EOF
 import os
 import sys
 if 'VIRTUAL_ENV' in os.environ:
